@@ -54,8 +54,6 @@ final class ModelDataSource {
         let descriptor = FetchDescriptor<T>(sortBy: [])
         do {
             let objects = try context.fetch(descriptor)
-            print("Objects fetchec:  \(objects.count)")
-            print(objects)
             return objects
         } catch {
             print(error.localizedDescription)

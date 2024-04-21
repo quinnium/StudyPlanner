@@ -1,34 +1,81 @@
 //
-//  CalendarPageView.swift
+//  CalendarView.swift
 //  StudyPlanner
 //
-//  Created by Quinn on 24/02/2024.
+//  Created by Quinn on 02/03/2024.
 //
 
 import SwiftUI
-import SwiftData
-import Observation
 
 struct CalendarPageView: View {
     
-    @State var vm = CalendarPageViewModel()
+    @Bindable var vm: CalendarPageViewModel
     
     var body: some View {
+        
         NavigationStack {
-            VStack(spacing: 30) {
-                List(vm.studySeries) { series in
-                    Button(series.subject) {
-                        vm.selectedStudySeries = series
+            VStack {
+                Spacer()
+                    .frame(height: 20)
+                VStack(spacing: 0) {
+                    // Buttons
+                    HStack(spacing: 20) {
+                        Button("Today") {
+                            vm.goToToday()
+                        }
+                        Spacer()
+                        Button("", systemImage: "chevron.left") {
+                            vm.prevMonth()
+                        }
+                        Button(vm.monthAndYear) {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                vm.yearMonthSelectorDisplayed.toggle()
+                            }
+                        }
+                        Button("", systemImage: "chevron.right") {
+                            vm.nextMonth()
+                        }
                     }
+                    .padding(20)
+                    .background(Color(uiColor: .systemBackground))
+                    
+                    
+                    // Year & Month picker
+                    if vm.yearMonthSelectorDisplayed {
+                        YearMonthPickerView(vm: vm.yearMonthPickerViewModel)
+                            .zIndex(-100)
+                            .transition(.move(edge: .top))
+                    }
+                    
+                    
+                    // Weekdays
+                    HStack(spacing: 0) {
+                        ForEach(SPDays.allDays, id: \.self) { spDay in
+                            Text(spDay.veryshortName)
+                                .font(.callout)
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .foregroundColor(Color(uiColor: .systemGray))
+                        }
+                    }
+                    .padding(.vertical, 10)
+                    
+                    // Calenday Month Days
+                    CalendarMonthView(vm: vm.calendarMonthViewModel)
                 }
-                Button("Refresh") {
-                    vm.fetchItems()
-                }.padding()
-//                CalendarView(modelContext: modelContext, date: Date())
+                .background {
+                    Color(uiColor: .systemBackground)
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.blue, lineWidth: 2)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .shadow(color: .primary.opacity(0.2), radius: 10, x: 0, y: 5)
+                Text("List will go below").font(.callout)
+                Spacer()
             }
-            .navigationDestination(for: StudySeries.self) { series in
-                StudySeriesView(vm: StudySeriesViewModel(studySeries: series))
-            }
+            .navigationTitle("Study Planner")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Add", systemImage: "plus") {
@@ -36,13 +83,10 @@ struct CalendarPageView: View {
                     }
                 }
             }
-            .onAppear {
-                vm.fetchItems()
-            }
         }
-        .sheet(isPresented: $vm.isShowingAddNewStudySheet, content: {
+        .sheet(isPresented: $vm.isShowingAddNewStudySheet) {
             StudySeriesView(vm: StudySeriesViewModel(studySeries: nil))
-        })
+        }
         .sheet(item: $vm.selectedStudySeries) { studySeries in
             StudySeriesView(vm: StudySeriesViewModel(studySeries: studySeries))
         }
@@ -50,8 +94,5 @@ struct CalendarPageView: View {
 }
 
 #Preview {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: StudySeries.self, configurations: config)
-    let context = container.mainContext
-    return CalendarPageView()
+    CalendarPageView(vm: CalendarPageViewModel())
 }

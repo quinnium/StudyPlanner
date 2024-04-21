@@ -2,36 +2,72 @@
 //  CalendarViewModel.swift
 //  StudyPlanner
 //
-//  Created by Quinn on 02/03/2024.
+//  Created by Quinn on 09/04/2024.
 //
 
 import Foundation
-import SwiftUI
 import Observation
+import SwiftUI
 
 @Observable
 class CalendarPageViewModel {
     
-    @ObservationIgnored
-    private var modelDataSource: ModelDataSource?
-
-    var isShowingAddNewStudySheet: Bool = false
-    var studySeries: [StudySeries] = []
-    var selectedStudySeries: StudySeries? = nil
-    
-    init() {
-        Task {
-            modelDataSource = await ModelDataSource.shared
-            DispatchQueue.main.async {
-                self.fetchItems()
-            }
+    // Class to ensure wrapped date variables are passed as reference types
+    @Observable
+    class DateWrapper {
+        var dateSelected: Date
+        var monthDate: Date
+        init(dateSelected: Date, monthDate: Date) {
+            self.dateSelected = dateSelected
+            self.monthDate = monthDate
         }
     }
-    func fetchItems() {
-        guard modelDataSource != nil else {
-            print("no Model Data Source Found!")
-            return
-        }
-        studySeries = modelDataSource!.fetchAllObjects(objectType: StudySeries.self)
+    
+//    var dateSelected: Date = .now
+//    var monthDate: Date = Date().startOfCalendarMonth
+  
+    var dateWrapper = DateWrapper(dateSelected: .now, monthDate: .now.startOfCalendarMonth)
+    
+    var selectedStudySeries: StudySeries? = nil
+    var isShowingAddNewStudySheet: Bool = false
+    
+    var yearMonthSelectorDisplayed: Bool = false
+    private let calendar = Calendar.autoupdatingCurrent
+    
+    var monthAndYear: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM yyyy"
+        return dateFormatter.string(from: dateWrapper.monthDate)
+    }
+    
+    // View Models for subviews
+    var yearMonthPickerViewModel: YearMonthPickerViewModel {
+        YearMonthPickerViewModel(dateWrapper: dateWrapper)
+    }
+    
+    var calendarMonthViewModel: CalendarMonthViewModel {
+        CalendarMonthViewModel(dateWrapper: dateWrapper)
+    }
+    
+    init() {
+        setDateSelected()
+    }
+    
+    func goToToday() {
+        setDateSelected()
+        dateWrapper.monthDate = Date().startOfCalendarMonth
+    }
+    
+    func prevMonth() {
+        dateWrapper.monthDate = calendar.date(byAdding: .month, value: -1, to: dateWrapper.monthDate) ?? dateWrapper.monthDate
+    }
+    
+    func nextMonth() {
+        dateWrapper.monthDate = calendar.date(byAdding: .month, value: +1, to: dateWrapper.monthDate) ?? dateWrapper.monthDate
+    }
+    
+    func setDateSelected() {
+        let components = calendar.dateComponents([.year,.month,.day], from: Date())
+        dateWrapper.dateSelected = calendar.date(from: components) ?? Date()
     }
 }

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftData
+//import SwiftData
 
 
 struct StudySessionView: View {
@@ -38,7 +38,7 @@ struct StudySessionView: View {
                         .brightness(-0.3)
                     }
                 }
-                DatePicker("Session Date", selection: $session.date, displayedComponents: [.date])
+                DatePicker("Session Date", selection: $session.date, in: Constants.Dates.allowableDateRange, displayedComponents: [.date])
                     .datePickerStyle(.compact)
                     .labelsHidden()
                     .tint(color)

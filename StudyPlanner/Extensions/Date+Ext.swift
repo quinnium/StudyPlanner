@@ -16,14 +16,12 @@ extension Date {
         return componantsSelf == componantsDateToCompare
     }
     
-    
     func firstWeekDayOfMonth() -> Int {
         var components = Calendar.autoupdatingCurrent.dateComponents([.year,.month], from: self)
         components.day = 1
         let firstDateOfMonth = Calendar.current.date(from: components) ?? Date()
         return Calendar.current.component(.weekday, from: firstDateOfMonth)
     }
-    
     
     func numberOfDaysInMonth() -> Int {
         let range = Calendar.autoupdatingCurrent.range(of: .day, in: .month, for: self)
@@ -45,4 +43,13 @@ extension Date {
         }
         return allDates
     }
+    
+    var startOfCalendarMonth: Date {
+        Calendar.current.dateInterval(of: .month, for: self)!.start
+    }
+
+    var endOfCalendarMonth: Date {
+        Calendar.current.dateInterval(of: .month, for: self)!.end
+    }
+
 }

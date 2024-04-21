@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftData
+//import SwiftData
 
 @Observable
 final class StudySeriesViewModel {
@@ -16,6 +16,7 @@ final class StudySeriesViewModel {
     private var studySeries: StudySeries?
     
     var isNewStudySeries: Bool { studySeries == nil }
+    var startOfToday: Date { Calendar.current.startOfDay(for: .now) }
     let allSPColors = SPColor.allCases
     
     var subjectText: String = ""
@@ -23,13 +24,13 @@ final class StudySeriesViewModel {
     var selectedColour: SPColor? = nil
     var studySessions: [StudySession] = []
     
-    init(studySeries: StudySeries?, forTestingEnvironment: Bool = false) {
+    init(studySeries: StudySeries?, inTestingEnvironment: Bool = false) {
         self.studySeries = studySeries
         if let studySeries {
             configureViewFromStudySeries(studySeries)
         }
         Task {
-            modelDataSource = forTestingEnvironment ? await ModelDataSource.forTesting : await ModelDataSource.shared
+            modelDataSource = inTestingEnvironment ? await ModelDataSource.forTesting : await ModelDataSource.shared
         }
     }
     
@@ -42,8 +43,8 @@ final class StudySeriesViewModel {
     }
     
     func addSession() {
-        let lastDate    = studySessions.last?.date ?? Date()
-        let newDate     = Calendar.current.date(byAdding: .weekday, value: 7, to: lastDate) ?? Date()
+        let lastDate    = studySessions.last?.date ?? startOfToday
+        let newDate     = Calendar.current.date(byAdding: .weekday, value: 7, to: lastDate) ?? startOfToday
         let newSession = StudySession(date: newDate)
         studySessions.append(newSession)
     }
