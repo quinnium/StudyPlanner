@@ -39,7 +39,6 @@ struct CalendarPageView: View {
                     .padding(20)
                     .background(Color(uiColor: .systemBackground))
                     
-                    
                     // Year & Month picker
                     if vm.yearMonthSelectorDisplayed {
                         YearMonthPickerView(vm: vm.yearMonthPickerViewModel)
@@ -47,21 +46,8 @@ struct CalendarPageView: View {
                             .transition(.move(edge: .top))
                     }
                     
-                    
-                    // Weekdays
-                    HStack(spacing: 0) {
-                        ForEach(SPDays.allDays, id: \.self) { spDay in
-                            Text(spDay.veryshortName)
-                                .font(.callout)
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity)
-                                .foregroundColor(Color(uiColor: .systemGray))
-                        }
-                    }
-                    .padding(.vertical, 10)
-                    
                     // Calenday Month Days
-                    CalendarMonthView(vm: vm.calendarMonthViewModel)
+                    CalendarMonthDatesView(vm: vm.calendarMonthViewModel)
                 }
                 .background {
                     Color(uiColor: .systemBackground)
@@ -72,8 +58,10 @@ struct CalendarPageView: View {
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .shadow(color: .primary.opacity(0.2), radius: 10, x: 0, y: 5)
-                Text("List will go below").font(.callout)
-                Spacer()
+
+                //List of sessions for selected Date
+                SessionsListView(vm: vm.sessionsListViewModel)
+                    .padding(.vertical, 10)
             }
             .navigationTitle("Study Planner")
             .toolbar {

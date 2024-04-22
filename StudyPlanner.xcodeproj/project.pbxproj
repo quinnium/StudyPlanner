@@ -29,9 +29,12 @@
 		9CE36A202BA0F20400A135A6 /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE36A1F2BA0F20400A135A6 /* CalendarDayView.swift */; };
 		E45745CB2BCC601F00CE0D9D /* YearMonthPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45745CA2BCC601F00CE0D9D /* YearMonthPickerView.swift */; };
 		E45745CD2BCC604900CE0D9D /* YearMonthPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45745CC2BCC604900CE0D9D /* YearMonthPickerViewModel.swift */; };
-		E4CEB9872BC47DDA00457D21 /* CalendarMonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CEB9862BC47DDA00457D21 /* CalendarMonthView.swift */; };
-		E4CEB9892BC47DEA00457D21 /* CalendarMonthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CEB9882BC47DEA00457D21 /* CalendarMonthViewModel.swift */; };
+		E4CEB9872BC47DDA00457D21 /* CalendarMonthDatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CEB9862BC47DDA00457D21 /* CalendarMonthDatesView.swift */; };
+		E4CEB9892BC47DEA00457D21 /* CalendarMonthDatesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CEB9882BC47DEA00457D21 /* CalendarMonthDatesViewModel.swift */; };
 		E4CEB98B2BC5CDD100457D21 /* CalendarPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CEB98A2BC5CDD100457D21 /* CalendarPageViewModel.swift */; };
+		E4D5EF9B2BD6E5840056814A /* SessionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5EF9A2BD6E5840056814A /* SessionsListView.swift */; };
+		E4D5EF9D2BD6E5930056814A /* SessionsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5EF9C2BD6E5930056814A /* SessionsListViewModel.swift */; };
+		E4D5EFA02BD6E5D60056814A /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5EF9F2BD6E5D60056814A /* SessionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,9 +72,12 @@
 		9CE36A1F2BA0F20400A135A6 /* CalendarDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayView.swift; sourceTree = "<group>"; };
 		E45745CA2BCC601F00CE0D9D /* YearMonthPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearMonthPickerView.swift; sourceTree = "<group>"; };
 		E45745CC2BCC604900CE0D9D /* YearMonthPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearMonthPickerViewModel.swift; sourceTree = "<group>"; };
-		E4CEB9862BC47DDA00457D21 /* CalendarMonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthView.swift; sourceTree = "<group>"; };
-		E4CEB9882BC47DEA00457D21 /* CalendarMonthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthViewModel.swift; sourceTree = "<group>"; };
+		E4CEB9862BC47DDA00457D21 /* CalendarMonthDatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthDatesView.swift; sourceTree = "<group>"; };
+		E4CEB9882BC47DEA00457D21 /* CalendarMonthDatesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthDatesViewModel.swift; sourceTree = "<group>"; };
 		E4CEB98A2BC5CDD100457D21 /* CalendarPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPageViewModel.swift; sourceTree = "<group>"; };
+		E4D5EF9A2BD6E5840056814A /* SessionsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsListView.swift; sourceTree = "<group>"; };
+		E4D5EF9C2BD6E5930056814A /* SessionsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsListViewModel.swift; sourceTree = "<group>"; };
+		E4D5EF9F2BD6E5D60056814A /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,8 +188,8 @@
 		02F220552BC9692B00D9813E /* CalendarMonthView */ = {
 			isa = PBXGroup;
 			children = (
-				E4CEB9862BC47DDA00457D21 /* CalendarMonthView.swift */,
-				E4CEB9882BC47DEA00457D21 /* CalendarMonthViewModel.swift */,
+				E4CEB9862BC47DDA00457D21 /* CalendarMonthDatesView.swift */,
+				E4CEB9882BC47DEA00457D21 /* CalendarMonthDatesViewModel.swift */,
 				02F220562BC9694E00D9813E /* CalendarDayView */,
 			);
 			path = CalendarMonthView;
@@ -204,6 +210,7 @@
 				E4CEB98A2BC5CDD100457D21 /* CalendarPageViewModel.swift */,
 				02F220552BC9692B00D9813E /* CalendarMonthView */,
 				E45745C92BCC5FE300CE0D9D /* YearMonthPickerView */,
+				E4D5EF992BD6E5610056814A /* SessionsListView */,
 			);
 			path = CalendarPageView;
 			sourceTree = "<group>";
@@ -235,6 +242,24 @@
 				E45745CC2BCC604900CE0D9D /* YearMonthPickerViewModel.swift */,
 			);
 			path = YearMonthPickerView;
+			sourceTree = "<group>";
+		};
+		E4D5EF992BD6E5610056814A /* SessionsListView */ = {
+			isa = PBXGroup;
+			children = (
+				E4D5EF9A2BD6E5840056814A /* SessionsListView.swift */,
+				E4D5EF9C2BD6E5930056814A /* SessionsListViewModel.swift */,
+				E4D5EF9E2BD6E5C50056814A /* SessionView */,
+			);
+			path = SessionsListView;
+			sourceTree = "<group>";
+		};
+		E4D5EF9E2BD6E5C50056814A /* SessionView */ = {
+			isa = PBXGroup;
+			children = (
+				E4D5EF9F2BD6E5D60056814A /* SessionView.swift */,
+			);
+			path = SessionView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,11 +367,12 @@
 				9CDB39E42B8A7A2B00CD03A5 /* StudySessionView.swift in Sources */,
 				9C390A512B93CC3800F2E5B5 /* Date+Ext.swift in Sources */,
 				025F392D2B88DA7C0036C39C /* Collection+Ext.swift in Sources */,
+				E4D5EF9D2BD6E5930056814A /* SessionsListViewModel.swift in Sources */,
 				9C390A462B93C9AA00F2E5B5 /* ColorSelectionView.swift in Sources */,
 				9CC5EA5B2B8952D700E42522 /* Constants.swift in Sources */,
 				9C390A422B93C8DC00F2E5B5 /* SubjectFieldView.swift in Sources */,
 				9C99D7E52B97A40300886E96 /* StudySession.swift in Sources */,
-				E4CEB9872BC47DDA00457D21 /* CalendarMonthView.swift in Sources */,
+				E4CEB9872BC47DDA00457D21 /* CalendarMonthDatesView.swift in Sources */,
 				9C390A4F2B93CBCE00F2E5B5 /* SPDay.swift in Sources */,
 				9C390A4A2B93CB1E00F2E5B5 /* CalendarPageView.swift in Sources */,
 				025F39022B88CC080036C39C /* StudyPlannerApp.swift in Sources */,
@@ -356,9 +382,11 @@
 				E45745CB2BCC601F00CE0D9D /* YearMonthPickerView.swift in Sources */,
 				9C15AD212B8BC161001AF00A /* Color+Ext.swift in Sources */,
 				9C390A442B93C98F00F2E5B5 /* StudySeriesView.swift in Sources */,
+				E4D5EF9B2BD6E5840056814A /* SessionsListView.swift in Sources */,
+				E4D5EFA02BD6E5D60056814A /* SessionView.swift in Sources */,
 				9CE36A202BA0F20400A135A6 /* CalendarDayView.swift in Sources */,
 				E45745CD2BCC604900CE0D9D /* YearMonthPickerViewModel.swift in Sources */,
-				E4CEB9892BC47DEA00457D21 /* CalendarMonthViewModel.swift in Sources */,
+				E4CEB9892BC47DEA00457D21 /* CalendarMonthDatesViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

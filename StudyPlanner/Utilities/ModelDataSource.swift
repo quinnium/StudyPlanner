@@ -60,6 +60,19 @@ final class ModelDataSource {
             return []
         }
     }
+    
+    func fetchStudySessionsForDateRange(from fromDate: Date, to toDate: Date) -> [StudySession] {
+        let descriptor = FetchDescriptor<StudySession>(
+            predicate: #Predicate { $0.date >= fromDate && $0.date <= toDate },
+            sortBy: [SortDescriptor(\.date), SortDescriptor(\.parentSeries?.subject)])
+        do {
+            let objects = try context.fetch(descriptor)
+            return objects
+        } catch {
+            print(error.localizedDescription)
+            return []
+        }
+    }
 }
 
 

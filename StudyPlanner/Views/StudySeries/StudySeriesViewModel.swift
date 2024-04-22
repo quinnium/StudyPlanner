@@ -38,7 +38,6 @@ final class StudySeriesViewModel {
         subjectText     = series.subject
         notesText       = series.notes
         selectedColour  = series.color
-        // TODO: check that these sessions are a COPY of the object's sessions, not the actual ones
         studySessions   = series.sessions
     }
     
@@ -55,13 +54,20 @@ final class StudySeriesViewModel {
     
     func saveStudySeries() {
         // TODO: ensure 'save' can only be tapped if a colour has been selected
-        guard   let selectedColour = selectedColour,
+        guard let selectedColour = selectedColour,
         let modelDataSource = modelDataSource else { return }
         if let studySeries {
             // Save to existing StudySeries
             studySeries.subject     = subjectText
             studySeries.notes       = notesText
             studySeries.color       = selectedColour
+            // Delete existing sessions to avoid orphaned StudySessions
+            for exitingSession in studySeries.sessions {
+                modelDataSource.deleteObject(exitingSession)
+            }
+            for newSession in studySessions {
+                modelDataSource.insertObject(newSession)
+            }
             studySeries.sessions    = studySessions
         } else {
             // Save new StudySeries

@@ -36,10 +36,8 @@ struct CalendarDayView: View {
                     .foregroundStyle(Color.secondary)
                     .opacity(0.3)
             }
-            HStack(spacing: 0) {
-                Text((calendar.component(.day, from: date)).description)
+            Text((calendar.component(.day, from: date)).description)
                     .foregroundColor(.primary)
-            }
             HStack(spacing: 1) {
                 ForEach(0..<colors.count, id:\.self) { index in
                     if index < 3 {
@@ -64,5 +62,5 @@ struct CalendarDayView: View {
 }
 
 #Preview {
-    CalendarDayView(selectedDate: .constant(.now), date: .now, colors: [.red, .green, .blue])
+    CalendarDayView(selectedDate: .constant(.now), date: .now, colors: [.red, .green, .blue, .orange])
 }

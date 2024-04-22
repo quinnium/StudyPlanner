@@ -9,9 +9,8 @@ import Foundation
 import SwiftUI
 
 @Observable
-class YearMonthPickerViewModel {
+final class YearMonthPickerViewModel {
     
-//    var monthDate: Date
     var dateWrapper: CalendarPageViewModel.DateWrapper
     var selectedMonth: Int {
         didSet {

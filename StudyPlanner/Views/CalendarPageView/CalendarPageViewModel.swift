@@ -10,9 +10,9 @@ import Observation
 import SwiftUI
 
 @Observable
-class CalendarPageViewModel {
+final class CalendarPageViewModel {
     
-    // Class to ensure wrapped date variables are passed as reference types
+    // Sub Class to ensure wrapped to pass dates as reference types to subviews
     @Observable
     class DateWrapper {
         var dateSelected: Date
@@ -23,14 +23,9 @@ class CalendarPageViewModel {
         }
     }
     
-//    var dateSelected: Date = .now
-//    var monthDate: Date = Date().startOfCalendarMonth
-  
     var dateWrapper = DateWrapper(dateSelected: .now, monthDate: .now.startOfCalendarMonth)
-    
     var selectedStudySeries: StudySeries? = nil
     var isShowingAddNewStudySheet: Bool = false
-    
     var yearMonthSelectorDisplayed: Bool = false
     private let calendar = Calendar.autoupdatingCurrent
     
@@ -45,16 +40,22 @@ class CalendarPageViewModel {
         YearMonthPickerViewModel(dateWrapper: dateWrapper)
     }
     
-    var calendarMonthViewModel: CalendarMonthViewModel {
-        CalendarMonthViewModel(dateWrapper: dateWrapper)
+    var calendarMonthViewModel: CalendarMonthDatesViewModel {
+        CalendarMonthDatesViewModel(dateWrapper: dateWrapper)
+    }
+    
+    var sessionsListViewModel: SessionsListViewModel {
+        SessionsListViewModel(fromDate: dateWrapper.dateSelected, toDate: dateWrapper.dateSelected) { studySeries in
+            self.selectedStudySeries = studySeries
+        }
     }
     
     init() {
-        setDateSelected()
+        selectTodaysDate()
     }
     
     func goToToday() {
-        setDateSelected()
+        selectTodaysDate()
         dateWrapper.monthDate = Date().startOfCalendarMonth
     }
     
@@ -66,7 +67,7 @@ class CalendarPageViewModel {
         dateWrapper.monthDate = calendar.date(byAdding: .month, value: +1, to: dateWrapper.monthDate) ?? dateWrapper.monthDate
     }
     
-    func setDateSelected() {
+    func selectTodaysDate() {
         let components = calendar.dateComponents([.year,.month,.day], from: Date())
         dateWrapper.dateSelected = calendar.date(from: components) ?? Date()
     }
