@@ -38,7 +38,7 @@ final class StudySeriesViewModel {
         subjectText     = series.subject
         notesText       = series.notes
         selectedColour  = series.color
-        studySessions   = series.sessions
+        studySessions   = series.sessions.map { StudySession(date: $0.date)}
     }
     
     func addSession() {
@@ -66,6 +66,7 @@ final class StudySeriesViewModel {
                 modelDataSource.deleteObject(exitingSession)
             }
             for newSession in studySessions {
+                newSession.parentSeries = studySeries
                 modelDataSource.insertObject(newSession)
             }
             studySeries.sessions    = studySessions
