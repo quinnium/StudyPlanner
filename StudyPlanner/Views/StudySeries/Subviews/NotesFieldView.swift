@@ -24,7 +24,7 @@ struct NotesFieldView: View {
                             .stroke(Color.secondary, lineWidth: 1)
                     }
                 if notesText.isEmpty {
-                    Text("Notes (optional)")
+                    Text("Subject notes (optional)")
                         .foregroundColor(Color(.systemGray3))
                         .padding(6)
                         .allowsHitTesting(false)

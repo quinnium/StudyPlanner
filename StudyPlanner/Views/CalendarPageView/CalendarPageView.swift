@@ -18,69 +18,45 @@ struct CalendarPageView: View {
                 Spacer()
                     .frame(height: 20)
                 VStack(spacing: 0) {
-                    // Buttons
-                    HStack(spacing: 20) {
-                        Button("Today") {
-                            vm.goToToday()
-                        }
-                        Spacer()
-                        Button("", systemImage: "chevron.left") {
-                            vm.prevMonth()
-                        }
-                        Button(vm.monthAndYear) {
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                vm.yearMonthSelectorDisplayed.toggle()
-                            }
-                        }
-                        Button("", systemImage: "chevron.right") {
-                            vm.nextMonth()
-                        }
-                    }
-                    .padding(20)
-                    .background(Color(uiColor: .systemBackground))
-                    
-                    // Year & Month picker
-                    if vm.yearMonthSelectorDisplayed {
-                        YearMonthPickerView(vm: vm.yearMonthPickerViewModel)
-                            .zIndex(-100)
-                            .transition(.move(edge: .top))
-                    }
+                    CalendarHeaderView(vm: vm.calendarHeaderViewModel)
                     
                     // Calenday Month Days
-                    CalendarMonthDatesView(vm: vm.calendarMonthViewModel)
+                    CalendarMonthView(vm: vm.calendarMonthViewModel)
                 }
+                .padding(.horizontal, 4)
                 .background {
                     Color(uiColor: .systemBackground)
                 }
                 .overlay {
-                    RoundedRectangle(cornerRadius: 20)
+                    RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.blue, lineWidth: 2)
                 }
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
                 .shadow(color: .primary.opacity(0.2), radius: 10, x: 0, y: 5)
 
-                //List of sessions for selected Date
-                SessionsListView(vm: vm.sessionsListViewModel)
+                // List of sessions for selected Date
+                SessionsListView(vm: vm.sessionsListViewModel, onDismiss: {
+                    vm.fetchData()
+                })
                     .padding(.vertical, 10)
             }
             .navigationTitle("Study Planner")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Add", systemImage: "plus") {
-                        vm.isShowingAddNewStudySheet = true
+                        vm.isShowingAddNewSeriesSheet = true
                     }
                 }
             }
         }
-        .sheet(isPresented: $vm.isShowingAddNewStudySheet) {
-            StudySeriesView(vm: StudySeriesViewModel(studySeries: nil))
-        }
-        .sheet(item: $vm.selectedStudySeries) { studySeries in
-            StudySeriesView(vm: StudySeriesViewModel(studySeries: studySeries))
+        .sheet(isPresented: $vm.isShowingAddNewSeriesSheet) {
+            vm.fetchData()
+        } content: {
+            StudySeriesView(vm: vm.newStudySeriesViewModel)
         }
     }
 }
 
 #Preview {
-    CalendarPageView(vm: CalendarPageViewModel())
+    CalendarPageView(vm: CalendarPageViewModel(dateWrapper: DateWrapper(dateSelected: .now)))
 }

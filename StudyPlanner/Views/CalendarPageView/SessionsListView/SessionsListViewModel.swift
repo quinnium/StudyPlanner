@@ -9,29 +9,38 @@ import Foundation
 
 @Observable
 final class SessionsListViewModel {
-    private let fromDate: Date
-    private let toDate: Date
-    var sessions: [StudySession] = []
-    var didSelectSeries: (StudySeries) -> Void
-    
-    private var modelDataSource: ModelDataSource?
 
-    init(fromDate: Date, toDate: Date, didSelectSeries: @escaping (StudySeries) -> Void) {
-        self.fromDate = fromDate
-        self.toDate = toDate
-        self.didSelectSeries = didSelectSeries
-        Task {
-            modelDataSource = await ModelDataSource.shared
-            DispatchQueue.main.async { [weak self] in
-                self?.fetchSessions()
-            }
-        }
+    var sessions: [StudySession] = []
+    var selectedSeriesForEditing: StudySeries?
+
+    // ViewModel for subview
+    var studySeriesViewModel: StudySeriesViewModel {
+        StudySeriesViewModel(studySeries: selectedSeriesForEditing)
     }
     
-    func fetchSessions() {
-        // Check modelDataSource is loaded
-        guard let modelDataSource = modelDataSource else { return }
-        // Fetch sessions (filter for just those within month)
-        sessions = modelDataSource.fetchStudySessionsForDateRange(from: fromDate, to: toDate)
+    init(sessions: [StudySession]) {
+        self.sessions = sessions
+        orderSessions()
+    }
+    
+    func orderSessions() {
+        sessions.sort {
+            if !$0.isCompleted == !$1.isCompleted {
+                return
+                    ($0.parentSeries?.subject ?? "", $0.parentSeries?.sessions.firstIndex(of: $0) ?? 0) <
+                    ($1.parentSeries?.subject ?? "", $1.parentSeries?.sessions.firstIndex(of: $1) ?? 0)
+            }
+            return !$0.isCompleted && $1.isCompleted
+        }
+        self.sessions = sessions
+    }
+    
+    func getSessionInfoText(session: StudySession) -> String {
+        guard let parentSeries = session.parentSeries else { return "" }
+        let existingSessions = parentSeries.sessions.sorted { $0.date < $1.date }
+        guard let index = existingSessions.firstIndex(of: session) else { return ""}
+        let sessionNumber = String(index + 1)
+        let totalNumber = String(parentSeries.sessions.count)
+        return "Session \(sessionNumber) of \(totalNumber)"
     }
 }

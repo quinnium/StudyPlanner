@@ -71,5 +71,5 @@ struct YearMonthPickerView: View {
 }
 
 #Preview {
-    return YearMonthPickerView(vm: YearMonthPickerViewModel(dateWrapper: .init(dateSelected: .now, monthDate: .now)))
+    return YearMonthPickerView(vm: YearMonthPickerViewModel(dateWrapper: .init(dateSelected: .now)))
 }

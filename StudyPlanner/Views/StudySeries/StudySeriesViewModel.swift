@@ -14,6 +14,7 @@ final class StudySeriesViewModel {
     @ObservationIgnored
     private var modelDataSource: ModelDataSource?
     private var studySeries: StudySeries?
+    private var dateSelected: Date?
     
     var isNewStudySeries: Bool { studySeries == nil }
     var startOfToday: Date { Calendar.current.startOfDay(for: .now) }
@@ -23,11 +24,20 @@ final class StudySeriesViewModel {
     var notesText: String = ""
     var selectedColour: SPColor? = nil
     var studySessions: [StudySession] = []
+    var isValidToSave: Bool {
+        return !subjectText.isEmpty && !studySessions.isEmpty && selectedColour != nil
+    }
+    var sessionsOutOfDateOrder: Bool {
+        studySessions != studySessions.sorted { $0.date < $1.date }
+    }
     
-    init(studySeries: StudySeries?, inTestingEnvironment: Bool = false) {
+    init(studySeries: StudySeries?, selectedDate: Date? = .now, inTestingEnvironment: Bool = false) {
         self.studySeries = studySeries
+        self.dateSelected = selectedDate
         if let studySeries {
             configureViewFromStudySeries(studySeries)
+        } else {
+            addSession()
         }
         Task {
             modelDataSource = inTestingEnvironment ? await ModelDataSource.forTesting : await ModelDataSource.shared
@@ -38,14 +48,22 @@ final class StudySeriesViewModel {
         subjectText     = series.subject
         notesText       = series.notes
         selectedColour  = series.color
-        studySessions   = series.sessions.map { StudySession(date: $0.date)}
+        studySessions   = series.sessions.sorted { $0.date < $1.date }.map { StudySession(date: $0.date, isCompleted: $0.isCompleted)}
     }
     
     func addSession() {
-        let lastDate    = studySessions.last?.date ?? startOfToday
-        let newDate     = Calendar.current.date(byAdding: .weekday, value: 7, to: lastDate) ?? startOfToday
+        var newDate = Date()
+        if let lastDate = studySessions.last?.date {
+            newDate = Calendar.current.date(byAdding: .weekday, value: 1, to: lastDate) ?? startOfToday
+        } else {
+            newDate = dateSelected ?? startOfToday
+        }
         let newSession = StudySession(date: newDate)
         studySessions.append(newSession)
+    }
+    
+    func reOrderStudySessions() {
+        studySessions.sort { $0.date < $1.date }
     }
     
     func removeSession(atIndex index: Int) {
@@ -53,7 +71,6 @@ final class StudySeriesViewModel {
     }
     
     func saveStudySeries() {
-        // TODO: ensure 'save' can only be tapped if a colour has been selected
         guard let selectedColour = selectedColour,
         let modelDataSource = modelDataSource else { return }
         if let studySeries {
@@ -62,14 +79,14 @@ final class StudySeriesViewModel {
             studySeries.notes       = notesText
             studySeries.color       = selectedColour
             // Delete existing sessions to avoid orphaned StudySessions
-            for exitingSession in studySeries.sessions {
-                modelDataSource.deleteObject(exitingSession)
+            for oldSession in studySeries.sessions {
+                modelDataSource.deleteObject(oldSession)
             }
+//            studySeries.sessions.removeAll()
             for newSession in studySessions {
-                newSession.parentSeries = studySeries
                 modelDataSource.insertObject(newSession)
             }
-            studySeries.sessions    = studySessions
+            studySeries.sessions    = studySessions.sorted { $0.date < $1.date }
         } else {
             // Save new StudySeries
             let newStudySeries      = StudySeries(subject: subjectText,
@@ -77,7 +94,7 @@ final class StudySeriesViewModel {
                                              notes: notesText,
                                              sessions: [])
             modelDataSource.insertObject(newStudySeries)
-            newStudySeries.sessions = studySessions
+            newStudySeries.sessions = studySessions.sorted { $0.date < $1.date }
         }
     }
 

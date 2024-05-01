@@ -11,7 +11,7 @@ import SwiftUI
 @Observable
 final class YearMonthPickerViewModel {
     
-    var dateWrapper: CalendarPageViewModel.DateWrapper
+    var dateWrapper: DateWrapper
     var selectedMonth: Int {
         didSet {
             updateMonthDate()
@@ -40,7 +40,8 @@ final class YearMonthPickerViewModel {
         case Dec = 12
     }
     
-    init(dateWrapper: CalendarPageViewModel.DateWrapper) {
+    init(dateWrapper: DateWrapper) {
+        print("YearMonthPickerViewModel init!")
         self.dateWrapper = dateWrapper
         selectedMonth = calendar.component(.month, from: dateWrapper.monthDate)
         selectedYear = calendar.component(.year, from: dateWrapper.monthDate)

@@ -30,6 +30,7 @@ struct StudySeriesView: View {
                     vm.saveStudySeries()
                     dismiss()
                 }
+                .disabled(!vm.isValidToSave)
                 .bold()
             }
             SubjectFieldView(subject: $vm.subjectText)
@@ -40,7 +41,7 @@ struct StudySeriesView: View {
                 LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
                     ForEach($vm.studySessions, id: \.id) { session in
                         let index = vm.studySessions.firstIndex(of: session.wrappedValue) ?? 0
-                        StudySessionView(session: session, index: index,  color: Color.from(spColor: vm.selectedColour)) {
+                        StudySessionView(session: session, isNewSeries: vm.isNewStudySeries, index: index,  color: Color.from(spColor: vm.selectedColour)) {
                             vm.removeSession(atIndex: index)
                         }
                         .frame(minHeight: 120)
@@ -67,6 +68,13 @@ struct StudySeriesView: View {
             }
         }
         .padding()
+        .onChange(of: vm.studySessions.map { $0.date}) {
+            if vm.sessionsOutOfDateOrder {
+                withAnimation {
+                    vm.reOrderStudySessions()
+                }
+            }
+        }
     }
 }
 

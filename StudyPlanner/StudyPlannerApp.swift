@@ -11,6 +11,8 @@ import SwiftData
 @main
 struct StudyPlannerApp: App {
     
+    let dateWrapper = DateWrapper(dateSelected: .now)
+    
 //    let container: ModelContainer = {
 //        let schema = Schema([StudySeries.self, StudySession.self])
 //        let config = ModelConfiguration(for: StudySeries.self, StudySession.self, isStoredInMemoryOnly: false)
@@ -24,7 +26,7 @@ struct StudyPlannerApp: App {
 //    
     var body: some Scene {
         WindowGroup {
-            CalendarPageView(vm: CalendarPageViewModel())
+            CalendarPageView(vm: CalendarPageViewModel(dateWrapper: dateWrapper))
         }
     }
 }

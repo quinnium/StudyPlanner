@@ -11,7 +11,8 @@ struct CalendarDayView: View {
     
     @Binding var selectedDate: Date
     let date: Date
-    let colors: [Color]
+    let completedColors: [Color]
+    let incompletedColors: [Color]
     let calendar = Calendar.autoupdatingCurrent
     var isSelectedDate: Bool {
         date == selectedDate
@@ -33,17 +34,34 @@ struct CalendarDayView: View {
             }
             if isToday {
                 RoundedRectangle(cornerRadius: 5)
-                    .foregroundStyle(Color.secondary)
+                    .foregroundStyle(Color.secondary).opacity(0.7)
                     .opacity(0.3)
             }
             Text((calendar.component(.day, from: date)).description)
                     .foregroundColor(.primary)
+            // completed Session Ticks
             HStack(spacing: 1) {
-                ForEach(0..<colors.count, id:\.self) { index in
+                ForEach(0..<completedColors.count, id:\.self) { index in
                     if index < 3 {
-                        Circle()
-                            .foregroundStyle(colors[index])
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 10, weight: .heavy))
+                            .foregroundStyle(completedColors[index])
+                    } else if index == 3 {
+                        Image(systemName: "plus")
+                            .font(.system(size: 10))
+                            .padding(0)
                             .frame(width: 10)
+                    }
+                }
+            }
+            .offset(y: -18)
+            // incompleted Session circles
+            HStack(spacing: 1) {
+                ForEach(0..<incompletedColors.count, id:\.self) { index in
+                    if index < 3 {
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 10))
+                            .foregroundStyle(incompletedColors[index])
                     } else if index == 3 {
                         Image(systemName: "plus")
                             .font(.system(size: 10))
@@ -62,5 +80,5 @@ struct CalendarDayView: View {
 }
 
 #Preview {
-    CalendarDayView(selectedDate: .constant(.now), date: .now, colors: [.red, .green, .blue, .orange])
+    CalendarDayView(selectedDate: .constant(.now), date: .now, completedColors: [.red, .green, .blue, .orange], incompletedColors: [.purple, .blue, .red, .yellow])
 }

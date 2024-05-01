@@ -10,26 +10,48 @@ import SwiftUI
 struct SessionsListView: View {
     
     @Bindable var vm: SessionsListViewModel
+    var onDismiss: () -> Void
     
     var body: some View {
-        List(vm.sessions) { session in
-            if let parentSeries = session.parentSeries {
-                Button {
-                    vm.didSelectSeries(parentSeries)
-                } label: {
-                    HStack(spacing: 10) {
-                        Circle()
-                            .foregroundStyle(Color.from(spColor: parentSeries.color))
-                            .frame(width: 20)
-                        Text(parentSeries.subject)
+        ScrollView {
+            ForEach($vm.sessions, id: \.id) { session in
+                if let parentSeries = session.wrappedValue.parentSeries {
+                    HStack {
+                        Button {
+                            vm.selectedSeriesForEditing = parentSeries
+                        } label: {
+                            HStack(spacing: 10) {
+                                Image(systemName: session.wrappedValue.isCompleted ? "checkmark" : "circle.fill")
+                                    .foregroundStyle(Color.from(spColor: parentSeries.color))
+                                    .font(.system(size: 20, weight: .heavy))
+                                VStack(alignment: .leading) {
+                                    Text(parentSeries.subject)
+                                        .foregroundStyle(session.wrappedValue.isCompleted ? .secondary : .primary)
+                                        .strikethrough(session.wrappedValue.isCompleted, color: .secondary)
+                                    Text(vm.getSessionInfoText(session: session.wrappedValue))
+                                        .foregroundStyle(.secondary)
+                                        .font(.caption)
+                                        .italic()
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        Spacer()
+                        CompleteSessionView(isComplete: session.isCompleted,text: "", size: 25, color: .primary)
                     }
+                    .padding(.horizontal)
                 }
             }
         }
-        .listStyle(.plain)
+        .sheet(item: $vm.selectedSeriesForEditing) {
+            onDismiss()
+        } content: { series in
+            StudySeriesView(vm: vm.studySeriesViewModel)
+        }
+
     }
 }
 
 #Preview {
-    SessionsListView(vm: .init(fromDate: .now.startOfCalendarMonth, toDate: .now.endOfCalendarMonth, didSelectSeries: {_ in }))
+    SessionsListView(vm: .init(sessions: []), onDismiss: {})
 }
