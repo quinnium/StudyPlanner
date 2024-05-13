@@ -27,7 +27,7 @@ struct CalendarMonthView: View {
             
             // Month days
             let columns = Array(repeating: GridItem(.flexible()), count: 7)
-            LazyVGrid(columns: columns, spacing: 1) {
+            LazyVGrid(columns: columns, spacing: 5) {
                 // Prefix 'gap' dates
                 ForEach(0..<vm.offsetDaysAtStartOfMonth, id:\.self) { _ in
                     Color.clear

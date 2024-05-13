@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CalendarPageView: View {
     
@@ -42,6 +43,11 @@ struct CalendarPageView: View {
             }
             .navigationTitle("Study Planner")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Subjects") {
+                        vm.isShowingAllSubjects = true
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Add", systemImage: "plus") {
                         vm.isShowingAddNewSeriesSheet = true
@@ -54,9 +60,22 @@ struct CalendarPageView: View {
         } content: {
             StudySeriesView(vm: vm.newStudySeriesViewModel)
         }
+        .sheet(isPresented: $vm.isShowingAllSubjects) {
+            vm.fetchData()
+        } content: {
+            SeriesListView(vm: vm.SeriesListViewModel)
+        }
     }
 }
 
+
 #Preview {
-    CalendarPageView(vm: CalendarPageViewModel(dateWrapper: DateWrapper(dateSelected: .now)))
+    let modelDataSource = ModelDataSource.forTesting
+    let studySeries = StudySeries(subject: "Mathematics", color: .green, notes: "This is some very long notes text, used to display a way of detecting truncation. Smooth animation should also be used here", sessions: [])
+    modelDataSource.insertObject(studySeries)
+    let session = StudySession(date: Date().startOfCalendarMonth)
+    modelDataSource.insertObject(session)
+    studySeries.sessions = [session]
+    
+    return CalendarPageView(vm: CalendarPageViewModel(dateWrapper: DateWrapper(dateSelected: .now), forTesting: true))
 }

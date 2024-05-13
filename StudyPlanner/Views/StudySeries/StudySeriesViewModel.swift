@@ -31,16 +31,17 @@ final class StudySeriesViewModel {
         studySessions != studySessions.sorted { $0.date < $1.date }
     }
     
-    init(studySeries: StudySeries?, selectedDate: Date? = .now, inTestingEnvironment: Bool = false) {
+    init(studySeries: StudySeries?, selectedDate: Date? = .now, forTesting: Bool = false) {
         self.studySeries = studySeries
         self.dateSelected = selectedDate
         if let studySeries {
             configureViewFromStudySeries(studySeries)
-        } else {
-            addSession()
         }
         Task {
-            modelDataSource = inTestingEnvironment ? await ModelDataSource.forTesting : await ModelDataSource.shared
+            await modelDataSource = forTesting ? ModelDataSource.forTesting : ModelDataSource.shared
+            if studySeries == nil {
+                addSession()
+            }
         }
     }
     
@@ -82,7 +83,6 @@ final class StudySeriesViewModel {
             for oldSession in studySeries.sessions {
                 modelDataSource.deleteObject(oldSession)
             }
-//            studySeries.sessions.removeAll()
             for newSession in studySessions {
                 modelDataSource.insertObject(newSession)
             }

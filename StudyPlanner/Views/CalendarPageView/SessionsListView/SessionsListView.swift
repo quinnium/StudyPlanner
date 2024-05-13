@@ -42,6 +42,8 @@ struct SessionsListView: View {
                     .padding(.horizontal)
                 }
             }
+            .animation(.easeIn(duration: 0.2), value: vm.sessions.map {$0.isCompleted})
+            
         }
         .sheet(item: $vm.selectedSeriesForEditing) {
             onDismiss()

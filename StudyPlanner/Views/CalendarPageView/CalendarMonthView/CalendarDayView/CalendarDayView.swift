@@ -34,17 +34,16 @@ struct CalendarDayView: View {
             }
             if isToday {
                 RoundedRectangle(cornerRadius: 5)
-                    .foregroundStyle(Color.secondary).opacity(0.7)
-                    .opacity(0.3)
+                    .foregroundStyle(Color.secondary.opacity(0.2))
             }
             Text((calendar.component(.day, from: date)).description)
                     .foregroundColor(.primary)
             // completed Session Ticks
-            HStack(spacing: 1) {
+            HStack(spacing: 0) {
                 ForEach(0..<completedColors.count, id:\.self) { index in
                     if index < 3 {
                         Image(systemName: "checkmark")
-                            .font(.system(size: 10, weight: .heavy))
+                            .font(.system(size: 12, weight: .heavy))
                             .foregroundStyle(completedColors[index])
                     } else if index == 3 {
                         Image(systemName: "plus")
@@ -56,11 +55,11 @@ struct CalendarDayView: View {
             }
             .offset(y: -18)
             // incompleted Session circles
-            HStack(spacing: 1) {
+            HStack(spacing: 0) {
                 ForEach(0..<incompletedColors.count, id:\.self) { index in
                     if index < 3 {
                         Image(systemName: "circle.fill")
-                            .font(.system(size: 10))
+                            .font(.system(size: 12))
                             .foregroundStyle(incompletedColors[index])
                     } else if index == 3 {
                         Image(systemName: "plus")
@@ -73,6 +72,7 @@ struct CalendarDayView: View {
             .offset(y: 18)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .contentShape(Rectangle())
         .onTapGesture {
             selectedDate = date
         }

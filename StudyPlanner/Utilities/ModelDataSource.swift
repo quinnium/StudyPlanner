@@ -11,8 +11,7 @@ import SwiftData
 final class ModelDataSource {
     
     private let container: ModelContainer
-    private let context: ModelContext
-    private let scratchContext: ModelContext
+    let context: ModelContext
     
     @MainActor static let shared        = ModelDataSource(forTesting: false)
     @MainActor static let forTesting    = ModelDataSource(forTesting: true)
@@ -23,22 +22,8 @@ final class ModelDataSource {
         do {
             self.container  = try ModelContainer(for: schema, configurations: config)
             self.context    = container.mainContext
-            self.scratchContext = ModelContext(container)
-            self.scratchContext.autosaveEnabled = false
         } catch {
             fatalError("Failed to load model container")
-        }
-    }
-    
-    func createTemporaryObject(_ object: any PersistentModel) {
-        context.insert(object)
-    }
-    
-    func saveAllTemporaryObjects() {
-        do {
-            try scratchContext.save()
-        } catch {
-            print(error.localizedDescription)
         }
     }
     

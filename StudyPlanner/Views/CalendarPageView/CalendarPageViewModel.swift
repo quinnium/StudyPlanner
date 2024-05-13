@@ -16,6 +16,7 @@ final class CalendarPageViewModel {
     private var sessionsForMonth: [StudySession] = []
     var dateWrapper: DateWrapper
     var isShowingAddNewSeriesSheet: Bool = false
+    var isShowingAllSubjects: Bool = false
 
     private var sessionsForDateSelected: [StudySession] {
         sessionsForMonth.filter { $0.date == dateWrapper.dateSelected }
@@ -34,11 +35,14 @@ final class CalendarPageViewModel {
     var newStudySeriesViewModel: StudySeriesViewModel {
         StudySeriesViewModel(studySeries: nil, selectedDate: dateWrapper.dateSelected)
     }
+    var SeriesListViewModel: SeriesListViewModel {
+        StudyPlanner.SeriesListViewModel()
+    }
     
-    init(dateWrapper: DateWrapper) {
+    init(dateWrapper: DateWrapper, forTesting: Bool = false) {
         self.dateWrapper = dateWrapper
         Task {
-            await modelDataSource = ModelDataSource.shared
+            await modelDataSource = forTesting ? ModelDataSource.forTesting : ModelDataSource.shared
             DispatchQueue.main.async {
                 self.fetchData()
             }

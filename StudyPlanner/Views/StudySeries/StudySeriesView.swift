@@ -81,6 +81,6 @@ struct StudySeriesView: View {
 
 #Preview {
     return NavigationStack {
-        StudySeriesView(vm: StudySeriesViewModel(studySeries: nil))
+        StudySeriesView(vm: StudySeriesViewModel(studySeries: nil, forTesting: true))
     }
 }
