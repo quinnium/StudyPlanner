@@ -25,7 +25,7 @@ final class StudySeriesViewModel {
     var selectedColour: SPColor? = nil
     var studySessions: [StudySession] = []
     var isValidToSave: Bool {
-        return !subjectText.isEmpty && !studySessions.isEmpty && selectedColour != nil
+        return !subjectText.isEmpty && !studySessions.isEmpty && selectedColour != nil && modelDataSource != nil
     }
     var sessionsOutOfDateOrder: Bool {
         studySessions != studySessions.sorted { $0.date < $1.date }

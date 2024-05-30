@@ -1,5 +1,5 @@
 //
-//  SessionsListViewModel.swift
+//  DaySessionsListViewModel.swift
 //  StudyPlanner
 //
 //  Created by Quinn on 22/04/2024.
@@ -8,10 +8,11 @@
 import Foundation
 
 @Observable
-final class SessionsListViewModel {
+final class DaySessionsListViewModel {
 
     var sessions: [StudySession] = []
     var selectedSeriesForEditing: StudySeries?
+    var headerOpacity: Double = 1
 
     // ViewModel for subview
     var studySeriesViewModel: StudySeriesViewModel {
@@ -21,7 +22,7 @@ final class SessionsListViewModel {
     init(sessions: [StudySession]) {
         self.sessions = sessions
         orderSessions()
-    }
+    }    
     
     func orderSessions() {
         sessions.sort {

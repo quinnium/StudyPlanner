@@ -41,7 +41,7 @@ struct StudySeriesView: View {
                 LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
                     ForEach($vm.studySessions, id: \.id) { session in
                         let index = vm.studySessions.firstIndex(of: session.wrappedValue) ?? 0
-                        StudySessionView(session: session, isNewSeries: vm.isNewStudySeries, index: index,  color: Color.from(spColor: vm.selectedColour)) {
+                        StudySessionView(session: session, isNewSeries: vm.isNewStudySeries, index: index,  color: Color.spColor(vm.selectedColour)) {
                             vm.removeSession(atIndex: index)
                         }
                         .frame(minHeight: 120)
@@ -54,11 +54,11 @@ struct StudySeriesView: View {
                     } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
-                                .strokeBorder(Color.from(spColor: vm.selectedColour), lineWidth: 3)
+                                .strokeBorder(Color.spColor(vm.selectedColour), lineWidth: 3)
                                 .opacity(0.2)
                             VStack {
                                 Label("Add", systemImage: "plus.circle.fill")
-                                    .foregroundStyle(Color.from(spColor: vm.selectedColour))
+                                    .foregroundStyle(Color.spColor(vm.selectedColour))
                                     .brightness(-0.3)
                             }
                         }

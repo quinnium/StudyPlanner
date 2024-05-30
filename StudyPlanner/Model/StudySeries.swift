@@ -28,4 +28,21 @@ final class StudySeries {
         self.color      = color
         self.sessions   = sessions
     }
+    
+    var allSessionsCompleted: Bool {
+        sessions.allSatisfy { $0.isCompleted }
+    }
+    
+    var firstUncompletedSessionDate: Date? {
+        var uncompletedSessions = sessions.filter { !$0.isCompleted }
+        let sorted = uncompletedSessions.sorted { $0.date < $1.date }
+        return sorted.first?.date
+    }
+    
+    var nextUncompletedSessionDate: Date? {
+        var uncompletedSessions = sessions.filter { !$0.isCompleted }
+        let sorted = uncompletedSessions.sorted { $0.date < $1.date }
+        let nextUncompletedSession = sorted.first { $0.date >= Calendar.autoupdatingCurrent.startOfDay(for: .now) }
+        return nextUncompletedSession?.date
+    }
 }

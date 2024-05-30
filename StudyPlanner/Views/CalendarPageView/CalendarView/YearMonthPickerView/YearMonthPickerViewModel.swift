@@ -41,7 +41,6 @@ final class YearMonthPickerViewModel {
     }
     
     init(dateWrapper: DateWrapper) {
-        print("YearMonthPickerViewModel init!")
         self.dateWrapper = dateWrapper
         selectedMonth = calendar.component(.month, from: dateWrapper.monthDate)
         selectedYear = calendar.component(.year, from: dateWrapper.monthDate)

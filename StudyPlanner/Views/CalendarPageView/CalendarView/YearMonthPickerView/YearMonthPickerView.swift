@@ -27,8 +27,8 @@ struct YearMonthPickerView: View {
                     .padding(.vertical, 15)
                     .padding(.horizontal, 50)
                 }
-                .background(Color.blue.opacity(0.15).gradient)
-                .border(Color.blue, width: 1)
+                .background(Color.secondary.opacity(0.15).gradient)
+                .border(Color.secondary, width: 1)
                 .scrollIndicators(.hidden)
                 .onAppear {
                     proxy.scrollTo(vm.selectedYear, anchor: .center)
@@ -54,8 +54,8 @@ struct YearMonthPickerView: View {
                     .padding(.vertical, 15)
                     .padding(.horizontal, 50)
                 }
-                .background(Color.blue.opacity(0.15).gradient)
-                .border(Color.blue, width: 1)
+                .background(Color.secondary.opacity(0.15).gradient)
+                .border(Color.secondary, width: 1)
                 .scrollIndicators(.hidden)
                 .onAppear {
                     proxy.scrollTo(vm.selectedMonth, anchor: .center)

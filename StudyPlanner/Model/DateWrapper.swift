@@ -21,6 +21,7 @@ class DateWrapper {
     
     func selectToday() {
         dateSelected = calendar.startOfDay(for: .now)
+        monthDate = dateSelected.startOfCalendarMonth
     }
     
     func prevMonth() {

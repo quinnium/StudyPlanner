@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CompleteSessionView: View {
+    @Environment(\.colorScheme) var colorScheme
     @Binding var isComplete: Bool
     let text: String
     let size: CGFloat
@@ -20,17 +21,25 @@ struct CompleteSessionView: View {
             HStack {
                 Text(text)
                     .font(.system(size: size))
-                    .foregroundStyle(color)
+                    .foregroundStyle(colorScheme == .dark ?
+                                        color.spStyleSecondarytTextDark :
+                                        color.spStyleSecondaryText)
                 if isComplete {
                     Image(systemName: "checkmark.square")
-                        .foregroundStyle(color)
-                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(colorScheme == .dark ?
+                                         color.spStyleSecondarytTextDark :
+                                         color.spStyleSecondaryText)
+                        .symbolRenderingMode(.monochrome)
                 } else {
                     Image(systemName: "square")
-                        .foregroundStyle(color)
+                        .foregroundStyle(colorScheme == .dark ?
+                                         color.spStyleSecondarytTextDark :
+                                         color.spStyleSecondaryText)
+                    
                 }
             }
             .font(.system(size: size))
+            
         }
         .sensoryFeedback(trigger: isComplete) { _, newValue in
             newValue == true ? .success : .warning

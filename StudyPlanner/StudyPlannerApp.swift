@@ -26,7 +26,8 @@ struct StudyPlannerApp: App {
 //    
     var body: some Scene {
         WindowGroup {
-            CalendarPageView(vm: CalendarPageViewModel(dateWrapper: dateWrapper))
+            MainTabView()
+//            CalendarPageView(vm: CalendarPageViewModel(dateWrapper: dateWrapper))
         }
     }
 }

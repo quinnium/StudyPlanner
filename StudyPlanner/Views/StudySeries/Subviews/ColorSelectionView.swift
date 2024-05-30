@@ -24,10 +24,10 @@ struct ColorSelectionView: View {
                     } label: {
                         ZStack{
                             Circle()
-                                .stroke(selectedColor == spColor ? Color.from(spColor: spColor) : .clear, lineWidth: 3)
+                                .stroke(selectedColor == spColor ? Color.spColor(spColor) : .clear, lineWidth: 3)
                                 .frame(height: 35)
                             Circle()
-                                .foregroundStyle(Color.from(spColor: spColor))
+                                .foregroundStyle(Color.spColor(spColor))
                                 .frame(height: 25)
                         }
                     }

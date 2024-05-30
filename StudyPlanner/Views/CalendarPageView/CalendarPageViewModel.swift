@@ -12,31 +12,23 @@ import SwiftUI
 @Observable
 final class CalendarPageViewModel {
 
+    private var dateWrapper: DateWrapper
     private var modelDataSource: ModelDataSource?
-    private var sessionsForMonth: [StudySession] = []
-    var dateWrapper: DateWrapper
-    var isShowingAddNewSeriesSheet: Bool = false
-    var isShowingAllSubjects: Bool = false
-
+    private var allSessions: [StudySession] = []
     private var sessionsForDateSelected: [StudySession] {
-        sessionsForMonth.filter { $0.date == dateWrapper.dateSelected }
+        allSessions.filter { $0.date == dateWrapper.dateSelected }
     }
+    var isShowingAddNewSeriesSheet: Bool = false
 
     // View Models for subviews
-    var calendarHeaderViewModel: CalendarHeaderViewModel {
-        CalendarHeaderViewModel(dateWrapper: dateWrapper)
+    var calendarViewModel: CalendarViewModel {
+        CalendarViewModel(dateWrapper: dateWrapper, allSessions: allSessions)
     }
-    var calendarMonthViewModel: CalendarMonthViewModel {
-        CalendarMonthViewModel(dateWrapper: dateWrapper, sessionsForMonth: sessionsForMonth)
-    }
-    var sessionsListViewModel: SessionsListViewModel {
-        SessionsListViewModel(sessions: sessionsForDateSelected)
+    var sessionsListViewModel: DaySessionsListViewModel {
+        DaySessionsListViewModel(sessions: sessionsForDateSelected)
     }
     var newStudySeriesViewModel: StudySeriesViewModel {
         StudySeriesViewModel(studySeries: nil, selectedDate: dateWrapper.dateSelected)
-    }
-    var SeriesListViewModel: SeriesListViewModel {
-        StudyPlanner.SeriesListViewModel()
     }
     
     init(dateWrapper: DateWrapper, forTesting: Bool = false) {
@@ -51,6 +43,6 @@ final class CalendarPageViewModel {
     
     func fetchData() {
         guard let modelDataSource else { return }
-        sessionsForMonth = modelDataSource.fetchStudySessionsForDateRange(from: dateWrapper.monthDate.startOfCalendarMonth, to: dateWrapper.monthDate.endOfCalendarMonth)
+        allSessions = modelDataSource.fetchAllObjects(objectType: StudySession.self)
     }
 }

@@ -10,6 +10,8 @@ import SwiftData
 
 
 struct StudySessionView: View {
+    
+    @Environment(\.colorScheme) var colorScheme
         
     @Binding var session: StudySession
     let isNewSeries: Bool
@@ -20,8 +22,22 @@ struct StudySessionView: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(color.opacity(session.isCompleted ? 0.1 : 0.2))
+           
+            if session.isCompleted {
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(colorScheme == .dark ?
+                                  color.spStyleBackgroundDark :
+                                  color.spStyleBackground,
+                                  lineWidth: 2)
+            } else {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(colorScheme == .dark ?
+                                        color.spStyleBackgroundDark :
+                                        color.spStyleBackground)
+
+            }
+            
+            
             VStack(spacing:10) {
                 HStack{
                     Button("", systemImage: "xmark") {
@@ -29,20 +45,21 @@ struct StudySessionView: View {
                             onDelete()
                         }
                     }
-                    .foregroundStyle(color)
-                    .brightness(-0.3)
+                    .foregroundStyle(colorScheme == .dark ?
+                                        color.spStyleMainTextDark :
+                                        color.spStyleMainText)
                     Spacer()
                     Text("Session \(index + 1)")
                         .font(.headline)
-                        .foregroundStyle(color)
-                        .brightness(-0.3)
+                        .foregroundStyle(colorScheme == .dark ? 
+                                         color.spStyleMainTextDark :
+                                            color.spStyleMainText)
                 }
                 DatePicker("Session Date", selection: $session.date, in: Constants.Dates.allowableDateRange, displayedComponents: [.date])
                     .datePickerStyle(.compact)
                     .labelsHidden()
                     .tint(color)
-                    .padding(.bottom, 10)
-                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 20)
                     .frame(maxHeight: .infinity)
             }
             .padding(10)
@@ -51,11 +68,11 @@ struct StudySessionView: View {
                 if !isNewSeries {
                     HStack {
                         CompleteSessionView(isComplete: $session.isCompleted, text: "Completed", size: 17, color: color)
-                            .brightness(-0.3)
                             .padding(5)
                     }
                 }
             }
+            
         }
     }
 }

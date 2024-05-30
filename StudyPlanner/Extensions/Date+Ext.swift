@@ -45,11 +45,10 @@ extension Date {
     }
     
     var startOfCalendarMonth: Date {
-        Calendar.current.dateInterval(of: .month, for: self)!.start
+        Calendar.autoupdatingCurrent.dateInterval(of: .month, for: self)!.start
     }
 
     var endOfCalendarMonth: Date {
-        Calendar.current.dateInterval(of: .month, for: self)!.end
+        Calendar.autoupdatingCurrent.dateInterval(of: .month, for: self)!.end
     }
-
 }

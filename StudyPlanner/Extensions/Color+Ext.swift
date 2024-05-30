@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Color {
-    static func from(spColor: SPColor?) -> Color {
+    static func spColor(_ spColor: SPColor?) -> Color {
         switch spColor {
             case .pink:
                 return .pink
@@ -58,3 +58,35 @@ extension Color {
         }
     }
 }
+
+extension Color {
+    // Light Mode
+    var spStyleBackground: Color {
+        let uiColor = UIColor(self)
+        return Color(uiColor: uiColor.lightenByPercentage(by: 40))
+    }
+    var spStyleMainText: Color {
+        let uiColor = UIColor(self)
+        return Color(uiColor: uiColor.darkenByPercentage(by: 95))
+    }
+    var spStyleSecondaryText: Color {
+        let uiColor = UIColor(self)
+        return Color(uiColor: uiColor.darkenByPercentage(by: 75))
+    }
+    // Dark Mode
+    var spStyleBackgroundDark: Color {
+        let uiColor = UIColor(self)
+        return Color(uiColor: uiColor.darkenByPercentage(by: 20))
+    }
+    var spStyleMainTextDark: Color {
+        let uiColor = UIColor(self)
+        return Color(uiColor: uiColor.lightenByPercentage(by: 95))
+    }
+    var spStyleSecondarytTextDark: Color {
+        let uiColor = UIColor(self)
+        return Color(uiColor: uiColor.lightenByPercentage(by: 85))
+    }
+
+    
+}
+

@@ -13,57 +13,39 @@ struct CalendarPageView: View {
     @Bindable var vm: CalendarPageViewModel
     
     var body: some View {
-        
-        NavigationStack {
-            VStack {
+        VStack(alignment: .leading, spacing: 0) {
+            // Page Title & Add button
+            HStack {
+                Text("Calendar")
+                    .font(.largeTitle)
+                    .bold()
                 Spacer()
-                    .frame(height: 20)
-                VStack(spacing: 0) {
-                    CalendarHeaderView(vm: vm.calendarHeaderViewModel)
-                    
-                    // Calenday Month Days
-                    CalendarMonthView(vm: vm.calendarMonthViewModel)
+                Button("", systemImage: "plus.circle.fill") {
+                    vm.isShowingAddNewSeriesSheet = true
                 }
-                .padding(.horizontal, 4)
-                .background {
-                    Color(uiColor: .systemBackground)
-                }
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.blue, lineWidth: 2)
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .font(.system(size: 25))
+            }
+            .padding(10)
+            // Calendar
+            CalendarView(vm: vm.calendarViewModel)
                 .shadow(color: .primary.opacity(0.2), radius: 10, x: 0, y: 5)
-
-                // List of sessions for selected Date
-                SessionsListView(vm: vm.sessionsListViewModel, onDismiss: {
-                    vm.fetchData()
-                })
-                    .padding(.vertical, 10)
-            }
-            .navigationTitle("Study Planner")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Subjects") {
-                        vm.isShowingAllSubjects = true
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Add", systemImage: "plus") {
-                        vm.isShowingAddNewSeriesSheet = true
-                    }
-                }
-            }
+            
+            // List of sessions for selected Date
+            DaySessionsListView(vm: vm.sessionsListViewModel, onSheetDismiss: {
+                vm.fetchData()
+            })
+        }
+        .background {
+            Color.gray.opacity(0.15)
+                .ignoresSafeArea()
+        }
+        .onAppear {
+            vm.fetchData()
         }
         .sheet(isPresented: $vm.isShowingAddNewSeriesSheet) {
             vm.fetchData()
         } content: {
             StudySeriesView(vm: vm.newStudySeriesViewModel)
-        }
-        .sheet(isPresented: $vm.isShowingAllSubjects) {
-            vm.fetchData()
-        } content: {
-            SeriesListView(vm: vm.SeriesListViewModel)
         }
     }
 }

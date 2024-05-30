@@ -1,5 +1,5 @@
 //
-//  SeriesListView.swift
+//  StudySeriesPageView.swift
 //  StudyPlanner
 //
 //  Created by Quinn on 12/05/2024.
@@ -8,32 +8,45 @@
 import SwiftUI
 import SwiftData
 
-struct SeriesListView: View {
+struct StudySeriesPageView: View {
     @Environment(\.dismiss) var dismiss
     
     @Bindable var vm: SeriesListViewModel
     
     var body: some View {
-        NavigationStack {
+        VStack(alignment: .leading) {
+            Text("All Subjects")
+                .font(.largeTitle)
+                .bold()
+            
             ScrollView {
-                ForEach(vm.allSeries) { series in
-                    SeriesSummaryView(vm: SeriesSummaryViewModel(series: series))
-                        .onTapGesture {
-                            vm.selectedSeriesForEditing = series
-                        }
-                }
-                Spacer()
-            }
-            .navigationTitle("All Subjects")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") {
-                        dismiss()
+                VStack(alignment: .leading) {
+                    ForEach(vm.uncompletedSeries) { series in
+                        SeriesSummaryView(vm: SeriesSummaryViewModel(series: series))
+                            .onTapGesture {
+                                vm.selectedSeriesForEditing = series
+                            }
                     }
+                    if vm.completedSeries.count > 0 {
+                        Text("Completed")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 8)
+                        ForEach(vm.completedSeries) { series in
+                            SeriesSummaryView(vm: SeriesSummaryViewModel(series: series))
+                                .onTapGesture {
+                                    vm.selectedSeriesForEditing = series
+                                }
+                        }
+                    }
+                    Spacer()
                 }
             }
         }
-        
+        .padding(.horizontal, 10)
+        .onAppear {
+            vm.fetchSeries()
+        }
         .sheet(item: $vm.selectedSeriesForEditing) {
             vm.fetchSeries()
         } content: { series in
@@ -52,8 +65,18 @@ struct SeriesListView: View {
                                  color: .green,
                                  notes: "This is an example of a very long notes text that requires multiple lines and will be truncated (if not expanded)",
                                  sessions: [])
+    let newSeries3 = StudySeries(subject: "Physics",
+                                 color: .pink,
+                                 notes: "Mini text",
+                                 sessions: [])
+    let newSeries4 = StudySeries(subject: "Physics",
+                                 color: .brown,
+                                 notes: "",
+                                 sessions: [])
     modelDataSource.insertObject(newSeries1)
     modelDataSource.insertObject(newSeries2)
+    modelDataSource.insertObject(newSeries3)
+    modelDataSource.insertObject(newSeries4)
     let session1 = StudySession(date: .now,
                                 parentSeries: newSeries1,
                                 isCompleted: true)
@@ -71,5 +94,5 @@ struct SeriesListView: View {
     modelDataSource.insertObject(session3)
     modelDataSource.insertObject(session4)
     
-    return SeriesListView(vm: SeriesListViewModel(forTesting: true))
+    return StudySeriesPageView(vm: SeriesListViewModel(forTesting: true))
 }
